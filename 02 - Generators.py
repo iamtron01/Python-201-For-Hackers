@@ -26,7 +26,9 @@ def xor_static_key(a):
         yield chr(ord(i) ^ key)
 for i in xor_static_key("test"):
     print(i)
-
+for i in xor_static_key("q`vq"):
+    print(i)
+    
 print("---------")
 
 xor_static_key2 = (chr(ord(i) ^ 0x5) for i in "test")
