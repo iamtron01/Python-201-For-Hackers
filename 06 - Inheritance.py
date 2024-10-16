@@ -46,12 +46,28 @@ class Age:
 
 class Person:
     def __init__(self, name: Name, age: Age):
-        if not name or not isinstance(name, Name):
-            raise DomainException("Name cannot be null")
-        if not name or not isinstance(age, Age):
-            raise DomainException("Age cannot be null")
         self.name = name
         self.age = age
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value: Name):
+        if not value or not isinstance(value, Name):
+            raise DomainException("Name cannot be null")
+        self._name = value
+
+    @property
+    def age(self):
+        return self._age
+
+    @age.setter
+    def age(self, value: Age):
+        if not value or not isinstance(value, Age):
+            raise DomainException("Age cannot be null")
+        self._age = value
 
 class Cves:
     def __init__(self, value: int):
@@ -72,9 +88,17 @@ class Cves:
 class Hacker(Person):
     def __init__(self, name: Name, age: Age, cves: Cves):
         super().__init__(name, age)
-        if not cves or not isinstance(cves, Cves):
-            raise DomainException("Cves cannot be null")
         self.cves = cves
+
+    @property
+    def cves(self):
+        return self._cves
+
+    @cves.setter
+    def cves(self, value: Cves):
+        if not value or not isinstance(value, Cves):
+            raise DomainException("Cves cannot be null")
+        self._cves = value
 
 import unittest
 
@@ -136,6 +160,36 @@ class TestPerson(unittest.TestCase):
         with self.assertRaises(DomainException):
             Person(Name("Bob"), "30")
 
+    def test_person_set_name(self):
+        person = Person(Name("Bob"), Age(30))
+        person.name = Name("Alice")
+        self.assertEqual(person.name.value, "Alice")
+
+    def test_person_set_invalid_name(self):
+        person = Person(Name("Bob"), Age(30))
+        with self.assertRaises(DomainException):
+            person.name = None
+
+    def test_person_set_invalid_name_type(self):
+        person = Person(Name("Bob"), Age(30))
+        with self.assertRaises(DomainException):
+            person.name = "Alice"
+
+    def test_person_set_age(self):
+        person = Person(Name("Bob"), Age(30))
+        person.age = Age(35)
+        self.assertEqual(person.age.value, 35)
+
+    def test_person_set_invalid_age(self):
+        person = Person(Name("Bob"), Age(30))
+        with self.assertRaises(DomainException):
+            person.age = None
+
+    def test_person_set_invalid_age_type(self):
+        person = Person(Name("Bob"), Age(30))
+        with self.assertRaises(DomainException):
+            person.age = "35"
+
 class TestCve(unittest.TestCase):
     def test_valid_cve(self):
         cve = Cves(12345)
@@ -194,6 +248,51 @@ class TestHacker(unittest.TestCase):
         age = Age(28)
         with self.assertRaises(DomainException):
             Hacker(name, age, "10")
+
+    def test_hacker_set_name(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        hacker.name = Name("Alice")
+        self.assertEqual(hacker.name.value, "Alice")
+
+    def test_hacker_set_invalid_name(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        with self.assertRaises(DomainException):
+            hacker.name = None
+
+    def test_hacker_set_invalid_name_type(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        with self.assertRaises(DomainException):
+            hacker.name = "Alice"
+
+    def test_hacker_set_age(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        hacker.age = Age(35)
+        self.assertEqual(hacker.age.value, 35)
+
+    def test_hacker_set_invalid_age(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        with self.assertRaises(DomainException):
+            hacker.age = None
+
+    def test_hacker_set_invalid_age_type(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        with self.assertRaises(DomainException):
+            hacker.age = "35"
+
+    def test_hacker_set_cves(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        hacker.cves = Cves(20)
+        self.assertEqual(hacker.cves.value, 20)
+
+    def test_hacker_set_invalid_cves(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        with self.assertRaises(DomainException):
+            hacker.cves = None
+
+    def test_hacker_set_invalid_cves_type(self):
+        hacker = Hacker(Name("Charlie"), Age(28), Cves(10))
+        with self.assertRaises(DomainException):
+            hacker.cves = "20"
 
 if __name__ == '__main__':
     unittest.main()
