@@ -1,0 +1,4 @@
+https://en.wikipedia.org/wiki/Windows_API
+https://en.wikipedia.org/wiki/Microsoft_Windows_library_files
+https://en.wikipedia.org/wiki/Unicode
+https://en.wikipedia.org/wiki/Function_prototype
