@@ -26,7 +26,7 @@ class Name:
         return self._value
 
     def __repr__(self):
-        return f"Name(value={self._value!r})"
+        return self._value
 
 class Age:
     def __init__(self, value: int):
